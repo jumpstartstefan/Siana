@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node Connections</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        label {
+            margin-right: 10px;
+            color: #555;
+        }
+
+        input {
+            padding: 8px;
+            font-size: 14px;
+            width: 60%;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .connections-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .connection {
+            margin: 10px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            font-size: 14px;
+            color: #333;
+            display: block;
+            width: 60%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media only screen and (max-width: 768px) {
+            input {
+                width: 100%;
+            }
+
+            .connection {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Връзки и Канали</h1>
+    <div style="text-align: center;">
+        <label for="node-textbox"></label>
+        <input type="text" id="node-textbox" placeholder="">
+        <button onclick="addNode()">Добави!</button>
+    </div>
+    <div id="connections-container" class="connections-container">
+        <!-- Connections will be dynamically added here -->
+    </div>
+    <script>
+        let nodes = new Set();
+
+        function addNode() {
+            const nodeName = document.getElementById('node-textbox').value.trim();
+            if (nodeName === '') {
+                alert('Въведи име.');
+                return;
+            }
+
+            if (nodes.has(nodeName)) {
+                alert('Вече съществува!');
+                return;
+            }
+
+            nodes.add(nodeName);
+
+            // Update the connections
+            updateConnections();
+        }
+
+        function updateConnections() {
+            const connectionsContainer = document.getElementById('connections-container');
+            connectionsContainer.innerHTML = '';
+
+            if (nodes.size < 2) {
+                const instructions = document.createElement('div');
+                instructions.textContent = 'Още един :)';
+                instructions.className = 'connection';
+                connectionsContainer.appendChild(instructions);
+            } else {
+                for (const node1 of nodes) {
+                    for (const node2 of nodes) {
+                        if (node1 !== node2) {
+                            const connection = document.createElement('div');
+                            connection.className = 'connection';
+                            connection.textContent = `${node1} - ${node2}`;
+                            connectionsContainer.appendChild(connection);
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
