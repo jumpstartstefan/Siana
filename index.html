@@ -78,13 +78,20 @@
     <div style="text-align: center;">
         <label for="node-textbox"></label>
         <input type="text" id="node-textbox" placeholder="">
-        <button onclick="addNode()">Добави!</button>
+        <button id="button" onclick="addNode()">Добави!</button>
     </div>
     <div id="connections-container" class="connections-container">
         <!-- Connections will be dynamically added here -->
     </div>
     <script>
         let nodes = new Set();
+         var input = document.getElementById("node-textbox");
+            input.addEventListener("keypress", function(event) {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                document.getElementById("button").click();
+              }
+            });
 
         function addNode() {
             const nodeName = document.getElementById('node-textbox').value.trim();
