@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Връзки</title>
     <style>
-        body {
+            body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f5f5f5;
             margin: 20px;
@@ -35,6 +35,7 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            display: none
         }
 
         button:hover {
@@ -70,22 +71,41 @@
             .connection {
                 width: 90%;
             }
+          }
+        .selected-connection {
+            background-color: #b7c8b7; /* or any other color for selected connections */
+            color: white;
         }
     </style>
 </head>
 <body>
-    <h1>Връзки и канали</h1>
-    <div style="text-align: center;">
-        <label for="node-textbox"></label>
-        <input type="text" id="node-textbox" placeholder="">
-        <button id="button" onclick="addNode()">Добави!</button>
-    </div>
-    <div id="connections-container" class="connections-container">
-        <!-- Connections will be dynamically added here -->
-    </div>
+  <h1>Връзки</h1>
+  <div style="text-align: center;">
+      <label for="node-textbox"></label>
+      <input type="text" id="node-textbox" placeholder="">
+      <button id="button" onclick="addNode()">Добави!</button>
+  </div>
+  <div id="connections-container" class="connections-container">
+      <!-- Connections will be dynamically added here -->
+      <p class="connections-container">Въведи елемнти за да видиш всички връзки между тях.</p>
+      <p class="connections-container">По време на работа може да се отбелязват вече отработените.</p>
+  </div>
+
     <script>
         let nodes = new Set();
-         var input = document.getElementById("node-textbox");
+
+        // Event listener for the container to handle click events on connections
+        document.getElementById('connections-container').addEventListener('click', function (event) {
+            const clickedConnection = event.target;
+
+            // Check if the clicked element is a connection
+            if (clickedConnection.classList.contains('connection')) {
+                // Toggle the 'selected-connection' class
+                clickedConnection.classList.toggle('selected-connection');
+            }
+        });
+
+        var input = document.getElementById("node-textbox");
             input.addEventListener("keypress", function(event) {
               if (event.key === "Enter") {
                 event.preventDefault();
@@ -108,6 +128,7 @@
             nodes.add(nodeName);
             document.getElementById('node-textbox').value = '';
 
+
             // Update the connections
             updateConnections();
         }
@@ -117,11 +138,13 @@
             connectionsContainer.innerHTML = '';
 
             if (nodes.size < 2) {
-                const instructions = document.createElement('div');
-                instructions.textContent = 'Още един :)';
-                instructions.className = 'connection';
-                connectionsContainer.appendChild(instructions);
-            } else {
+                if (nodes.size < 2) {
+                  const instructions = document.createElement('div');
+                  instructions.textContent = 'Още един :)';
+                  instructions.className = 'connection';
+                  connectionsContainer.appendChild(instructions);
+                }
+              } else {
                 for (const node1 of nodes) {
                     for (const node2 of nodes) {
                         if (node1 !== node2) {
